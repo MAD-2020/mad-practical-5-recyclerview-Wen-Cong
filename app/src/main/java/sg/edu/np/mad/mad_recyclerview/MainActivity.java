@@ -1,26 +1,57 @@
 package sg.edu.np.mad.mad_recyclerview;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.recyclerview.widget.DefaultItemAnimator;
+import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import android.content.Context;
 import android.os.Bundle;
+import android.view.View;
 import android.view.inputmethod.InputMethodManager;
+import android.widget.Button;
+import android.widget.CheckBox;
+import android.widget.EditText;
 
 import java.util.ArrayList;
 
 public class MainActivity extends AppCompatActivity {
+    RecyclerView recyclerView;
+    EditText taskName;
+    CheckBox checkBox;
+    Button add;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+        taskName = findViewById(R.id.taskName);
+        checkBox = findViewById(R.id.check);
+        recyclerView = findViewById(R.id.recyclerView);
+        final ArrayList<Task> tasklist = new ArrayList<Task>();
+        add = findViewById(R.id.add);
+        LinearLayoutManager layoutManager = new LinearLayoutManager(this);
+        recyclerView.setLayoutManager(layoutManager);
+        recyclerView.setItemAnimator(new DefaultItemAnimator());
+        add.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                String name = taskName.getText().toString().trim();
+                Task t = new Task(name, false);
+                tasklist.add(t);
+                TaskAdapter adapter = new TaskAdapter(tasklist);
+
+                recyclerView.setAdapter(adapter);
+            }
+        });
+
+
     }
 
     /**
      * Upon calling this method, the keyboard will retract
      * and the recyclerview will scroll to the last item
-     *
+     *      *
      * @param rv RecyclerView for scrolling to
      * @param data ArrayList that was passed into RecyclerView
      */
