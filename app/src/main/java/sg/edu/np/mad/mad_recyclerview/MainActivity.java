@@ -12,6 +12,7 @@ import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.EditText;
+import android.widget.Toast;
 
 import java.util.ArrayList;
 
@@ -37,11 +38,17 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 String name = taskName.getText().toString().trim();
-                Task t = new Task(name, false);
-                tasklist.add(t);
-                TaskAdapter adapter = new TaskAdapter(tasklist);
-
-                recyclerView.setAdapter(adapter);
+                if(name.isEmpty()){
+                    Toast.makeText(MainActivity.this, "Task Name cannot be empty!",Toast.LENGTH_SHORT).show();
+                }
+                else{
+                    Task t = new Task(name, false);
+                    tasklist.add(t);
+                    TaskAdapter adapter = new TaskAdapter(tasklist, MainActivity.this);
+                    recyclerView.setAdapter(adapter);
+                    showNewEntry(recyclerView, tasklist);
+                    taskName.getText().clear();
+                }
             }
         });
 
